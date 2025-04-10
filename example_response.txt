@@ -1,0 +1,37 @@
+Certainly! Below is a Python function that finds the missing number in a list of integers ranging from 0 to n. I've added type annotations for all variables.
+
+```python
+from typing import List
+
+def find_missing_number(numbers: List[int], n: int) -> int:
+    """
+    Find the missing number in a given list of numbers ranging from 0 to n.
+
+    Args:
+    numbers (List[int]): List of integers from 0 to n with one missing number.
+    n (int): The upper limit of the number range.
+
+    Returns:
+    int: The missing number.
+    """
+    # Calculate the expected sum of numbers from 0 to n
+    expected_sum: int = n * (n + 1) // 2
+    # Calculate the actual sum of the numbers in the list
+    actual_sum: int = sum(numbers)
+    
+    # The missing number is the difference between the expected sum and the actual sum
+    missing_number: int = expected_sum - actual_sum
+    
+    return missing_number
+
+# Example usage:
+# numbers = [0, 1, 2, 3, 5]
+# n = 5
+# print(find_missing_number(numbers, n))  # Output: 4
+```
+
+### Explanation:
+- The function `find_missing_number` takes a list of integers `numbers` and an integer `n` as parameters.
+- It calculates the expected sum of the first `n` natural numbers using the formula \( \text{sum} = \frac{n(n + 1)}{2} \).
+- It then computes the actual sum of the numbers present in the list.
+- Finally, the missing number is found by subtracting the actual sum from the expected sum.
