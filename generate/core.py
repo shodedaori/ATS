@@ -3,8 +3,8 @@ from openai import OpenAI
 
 def generate_response(
         prompt, 
-        model="gpt-4o-mini", 
-        api_key="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"
+        model="gpt-4o", 
+        api_key="YOUR API KEY"
     ):
     """
     Generate a response from the OpenAI API.
@@ -58,4 +58,17 @@ def generate_test_code(prompt, solution, prop, func_name):
     test_code_prompt = f"{code_prefix}{prompt}\n\n{solution_prefix}{solution}\n\n{property_prefix}{prop}\n\n{test_code_prefix}"
     response = generate_response(test_code_prompt)
     
+    return response
+
+
+def generate_fix(prompt, test_case, property):
+    code_prefix = "Here's my coding task:\n"
+    test_case_prefix = "Here's my test case:\n"
+    property_prefix = "Here's the property I want to test:\n"
+    fix_prefix = "This test case raise an error. Check whether the function is wrong or the test case is wrong. If the function is wrong, outputs FUNCTION first and outputs a new function code without explanation. If the test case is wrong, outputs TEST first and outputs a new test function code without explanation. If they are both wrong, outputs FUNCTION AND TEST first, and outputs a new function code and a new test function separately without explanation.\n"
+
+    fix_prompt = f"{code_prefix}{prompt}\n\n{test_case_prefix}```python{test_case}```\n\n{property_prefix}{property}\n\n{fix_prefix}"
+    
+    response = generate_response(fix_prompt)
+
     return response

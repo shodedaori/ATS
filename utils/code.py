@@ -55,9 +55,14 @@ def get_extra_info(code: str) -> str:
 def remove_special_tokens(text: str) -> str:
     lines = text.splitlines()
     cleaned_lines = []
-    special_tokens = "8u9U10I"
+    special_tokens = ["8u9U10I", "your_module_name", "your_module"]
     for line in lines:
-        if special_tokens in line:
+        flag = 0
+        for token in special_tokens:
+            if token in line:
+                flag = 1
+                break
+        if flag == 1:
             continue
         cleaned_lines.append(line)
     

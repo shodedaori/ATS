@@ -24,11 +24,17 @@ def generate_test_case(prompt, response, k=4):
         # Add the test code to the list
         test_case.append(test_code)
 
-    return test_case 
+    return prop_list, test_case 
 
 
-def write_test_case(folder_path, code, test_cases):
+def write_test_case(folder_path, code, test_cases, prop_list):
     for i, test_case in enumerate(test_cases):
+        with open(f"{folder_path}/test_code_{i}.txt", "w") as f:
+            f.write(test_case)
+
+        with open(f"{folder_path}/property_{i}.txt", "w") as f:
+            f.write(prop_list[i])
+
         with open(f"{folder_path}/test_{i}.py", "w") as f:
             f.write(code)
             f.write('\n')
@@ -41,6 +47,9 @@ def generate_test_suite(folder_path, prompt, k=4):
 
     solution = generate_solution(prompt)
     standard_code = get_python_code(solution)
+
+    with open(os.path.join(folder_path, "prompt.txt"), "w") as f:
+        f.write(prompt)
 
     func_name = get_func_name(standard_code)
     extra_info = get_extra_info(standard_code)
@@ -56,9 +65,15 @@ def generate_test_suite(folder_path, prompt, k=4):
         style_names.append(name)
         style_code.append(code)
 
-    test_cases = generate_test_case(prompt, standard_code, k)
+    props, test_cases = generate_test_case(prompt, standard_code, k)
     for name, code in zip(style_names, style_code):
         this_path = os.path.join(folder_path, name)
         os.makedirs(this_path, exist_ok=True)
-        write_test_case(this_path, code, test_cases)
-    
+        
+        with open(os.path.join(this_path, "func_code.txt"), "w") as f:
+            f.write(code)
+
+        if name != 'standard':
+            continue
+
+        write_test_case(this_path, code, test_cases, props)
